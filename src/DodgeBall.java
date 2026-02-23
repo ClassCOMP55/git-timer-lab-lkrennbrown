@@ -22,8 +22,8 @@ public class DodgeBall extends GraphicsProgram implements ActionListener {
 	private int numTimes;
 	
 	public static final int SIZE = 25;
-	public static final int SPEED = 2;
-	public static final int MS = 50;
+	public static final int SPEED = 15;
+	public static final int MS = 20;
 	public static final int MAX_ENEMIES = 10;
 	public static final int WINDOW_HEIGHT = 600;
 	public static final int WINDOW_WIDTH = 300;
@@ -46,6 +46,7 @@ public class DodgeBall extends GraphicsProgram implements ActionListener {
 		numTimes++;
 		moveAllBallsOnce();
 		moveAllEnemiesOnce();
+		checkCollisions();
 		if (numTimes % 40 == 0) {
 			addAnEnemy();
 		}
@@ -96,6 +97,16 @@ public class DodgeBall extends GraphicsProgram implements ActionListener {
 	private void moveAllEnemiesOnce() {
 		for(GRect enemy : enemies) {
 			enemy.move(0, rgen.nextInt(-2, 2));
+		}
+	}
+	
+	private void checkCollisions() {
+		for(GOval ball : balls) {
+			GObject hit = getElementAt(ball.getX() + SIZE, ball.getY() + SIZE/2);
+			if(hit instanceof GRect) {
+				remove(hit);
+				enemies.remove(hit);
+			}
 		}
 	}
 	
