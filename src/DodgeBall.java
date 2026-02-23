@@ -20,6 +20,8 @@ public class DodgeBall extends GraphicsProgram implements ActionListener {
 	private Timer movement;
 	private RandomGenerator rgen;
 	private int numTimes;
+	private int destroyed;
+	private GLabel destroyedLabel;
 	
 	public static final int SIZE = 25;
 	public static final int SPEED = 15;
@@ -31,8 +33,12 @@ public class DodgeBall extends GraphicsProgram implements ActionListener {
 	public void run() {
 		rgen = RandomGenerator.getInstance();
 		numTimes = 0;
+		destroyed = 0;
+		destroyedLabel = new GLabel("Destroyed: 0", 0, 20);
+		add(destroyedLabel);
 		balls = new ArrayList<GOval>();
 		enemies = new ArrayList<GRect>();
+		
 		
 		text = new GLabel(""+enemies.size(), 0, WINDOW_HEIGHT);
 		add(text);
@@ -103,9 +109,23 @@ public class DodgeBall extends GraphicsProgram implements ActionListener {
 	private void checkCollisions() {
 		for(GOval ball : balls) {
 			GObject hit = getElementAt(ball.getX() + SIZE, ball.getY() + SIZE/2);
+			GObject hit2 = getElementAt(ball.getX() + SIZE, ball.getY());
+			GObject hit3 = getElementAt(ball.getX() + SIZE, ball.getY() + SIZE);
 			if(hit instanceof GRect) {
 				remove(hit);
 				enemies.remove(hit);
+				destroyed++;
+				destroyedLabel.setLabel("Destroyed: " + destroyed);
+			} else if(hit2 instanceof GRect) {
+				remove(hit2);
+				enemies.remove(hit2);
+				destroyed++;
+				destroyedLabel.setLabel("Destroyed: " + destroyed);
+			} else if(hit3 instanceof GRect) {
+				remove(hit3);
+				enemies.remove(hit3);
+				destroyed++;
+				destroyedLabel.setLabel("Destroyed: " + destroyed);
 			}
 		}
 	}
